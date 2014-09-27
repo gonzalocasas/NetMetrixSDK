@@ -1,0 +1,22 @@
+# use glob syntax
+syntax: glob
+
+# ignore thumbnails created by windows
+Thumbs.db
+
+# ignore files build by Visual Studio
+*.user
+*.suo
+*.sln.docstates
+[Bb]in/
+[Oo]bj/
+PerfLogs/
+
+# NuGet
+packages/
+!NuGet.exe
+
+# Tooling
+_ReSharper*/
+*.resharper
+[Tt]est[Rr]esult*
