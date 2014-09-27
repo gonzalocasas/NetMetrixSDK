@@ -1,4 +1,3 @@
 ## (unreleased)
 
- - Implementation of the NetMetrix tracker for Windows Phone
- 
+ - Implementation of the NetMetrix SDK for Windows Phone

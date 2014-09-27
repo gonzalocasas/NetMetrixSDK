@@ -1,4 +1,4 @@
-NetMetrixReporter
-=================
+NetMetrix SDK
+=============
 
-Net-Metrix reporter for Windows Phone applications
+Net-Metrix SDK for Windows Phone applications
