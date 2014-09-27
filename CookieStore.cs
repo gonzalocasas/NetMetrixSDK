@@ -2,7 +2,7 @@
 using System.IO;
 using System.IO.IsolatedStorage;
 
-namespace NetMetrixReporter
+namespace NetMetrixSdk
 {
     public class CookieStore
     {

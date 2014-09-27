@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using Microsoft.Phone.Controls;
 
-namespace NetMetrixReporter
+namespace NetMetrixSdk
 {
     public static class NetMetrix
     {
@@ -28,6 +28,14 @@ namespace NetMetrixReporter
         public static Tracker Tracker
         {
             get { return tracker; }
+        }
+
+        public static void EnableNavigationTracker(PhoneApplicationFrame appFrame)
+        {
+            appFrame.Navigated += (sender, args) =>
+            {
+                Tracker.Track();
+            };
         }
     }
 }

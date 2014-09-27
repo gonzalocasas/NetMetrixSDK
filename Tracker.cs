@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 
-namespace NetMetrixReporter
+namespace NetMetrixSdk
 {
     public class Tracker
     {

@@ -6,11 +6,11 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NetMetrixReporter")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("NetMetrixSDK")]
+[assembly: AssemblyDescription("Net-Metrix SDK for Windows Phone applications")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NetMetrixReporter")]
+[assembly: AssemblyCompany("Gonzalo Casas")]
+[assembly: AssemblyProduct("NetMetrix SDK")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
