@@ -14,15 +14,12 @@ namespace NetMetrixSdk
 
         static NetMetrix()
         {
-            Host = "wemfbox.ch";
-            DebugHostFilter();
+            Host = GetHostName();
         }
 
-        // The net-metrix host is defined statically, but overriden with the test host if DEBUG
-        [Conditional("DEBUG")]
-        private static void DebugHostFilter()
+        private static string GetHostName()
         {
-            Host = "wemfbox-test.ch";
+            return Debugger.IsAttached ? "wemfbox-test.ch" : "wemfbox.ch";
         }
 
         public static Tracker Tracker
