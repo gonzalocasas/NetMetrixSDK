@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NetMetrix.cs" />
+    <Compile Include="NetMetrixAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CookieStore.cs" />
     <Compile Include="Tracker.cs" />

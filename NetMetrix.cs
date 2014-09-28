@@ -36,7 +36,17 @@ namespace NetMetrixSdk
 
         public static void EnableNavigationTracker(PhoneApplicationFrame appFrame)
         {
-            appFrame.Navigated += (sender, args) => Tracker.Track();
+            appFrame.Navigated += (sender, args) =>
+            {
+                var section = GetSectionName(args.Content);
+                Tracker.Track(section);
+            };
+        }
+
+        private static string GetSectionName(object content)
+        {
+            var attribute = (NetMetrixAttribute)Attribute.GetCustomAttribute(content.GetType(), typeof(NetMetrixAttribute));
+            return attribute != null ? attribute.Section : Tracker.DefaultSection;
         }
     }
 }

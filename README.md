@@ -7,7 +7,7 @@ Net-Metrix SDK for Windows Phone applications to simplify reporting app activity
 
 Using [NuGet](https://www.nuget.org/packages/NetMetrixSdk/) package manager:
 
-	PM> Install-Package NetMetrixSdk
+    PM> Install-Package NetMetrixSdk
 
 This adds also the file ``Properties\NetMetrix.xml`` with configuration values. 
 Make sure you assign your offer ID (Angebotskennung) and app ID.
@@ -25,13 +25,21 @@ One good place to put this initialization is on your ``Application`` initializat
       NetMetrix.EnableNavigationTracker(RootFrame);
     }
 
+It will track all navigation events using the default section name (``general``). To use a different section name, add an attribute to your page classes:
+
+    [NetMetrix("results")]
+    public class SearchResultsPage : AnimatedRefreshableBasePage 
+    {
+
+    }
+
 ### Manual tracking
 
 To manually track events:
 
     NetMetrix.Tracker.Track("section_name");
 
-The section is optional, and defaults to  ``general``.
+The section is optional and defaults to  ``general``.
 
 ### Monitoring the reported events
 

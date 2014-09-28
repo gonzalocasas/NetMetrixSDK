@@ -7,6 +7,7 @@ namespace NetMetrixSdk
 {
     public class Tracker
     {
+        public const string DefaultSection = "general";
         private DateTime lastRequest = DateTime.MinValue;
 
         public CookieStore CookieStore { get; set; }
@@ -28,7 +29,7 @@ namespace NetMetrixSdk
         /// <para>This call automatically filters calls that are too close together.</para>
         /// </summary>
         /// <param name="section">Name of the section to track. Defaults to 'general'.</param>
-        public void Track(string section = "general")
+        public void Track(string section = DefaultSection)
         {
             var now = DateTime.Now;
             if (now - lastRequest <= TimeSpan.FromSeconds(2))
