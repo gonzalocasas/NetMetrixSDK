@@ -21,13 +21,5 @@ namespace NetMetrixSdk
         {
             get { return tracker; }
         }
-
-        public static void EnableNavigationTracker(PhoneApplicationFrame appFrame)
-        {
-            appFrame.Navigated += (sender, args) =>
-            {
-                Tracker.Track();
-            };
-        }
     }
 }
