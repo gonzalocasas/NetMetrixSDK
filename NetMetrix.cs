@@ -14,12 +14,7 @@ namespace NetMetrixSdk
 
         static NetMetrix()
         {
-            Host = GetHostName();
-        }
-
-        private static string GetHostName()
-        {
-            return Debugger.IsAttached ? "wemfbox-test.ch" : "wemfbox.ch";
+            Host = Debugger.IsAttached ? "wemfbox-test.ch" : "wemfbox.ch";
         }
 
         public static Tracker Tracker
