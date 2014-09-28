@@ -29,7 +29,7 @@ One good place to put this initialization is on your ``Application`` initializat
 
 To manually track events:
 
-    NetMetrix.Track("section_name");
+    NetMetrix.Tracker.Track("section_name");
 
 The section is optional, and defaults to  ``general``.
 
