@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<netmetrix>
+  <OfferID><!-- Here enter your offer ID (Angebotskennung) --></OfferID>
+  <AppID><!-- Here enter your app ID  --></AppID>
+</netmetrix>
