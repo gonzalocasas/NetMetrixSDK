@@ -83,7 +83,9 @@ namespace NetMetrixSdk
         private void HandleResponse(IAsyncResult result)
         {
             var request = (HttpWebRequest)result.AsyncState;
-            var response = (HttpWebResponse)request.EndGetResponse(result);
+            var response = GetResponse(result);
+
+            if (response == null) return;
 
             // We add cookies to a fixed cookie domain to make sure we can access them later
             // Otherwise the redirects make it hard to guess where the cookie ended up
@@ -98,6 +100,19 @@ namespace NetMetrixSdk
             if (cookiePairs.Any())
             {
                 CookieStore.Save(CookieStorageKey, string.Join("; ", cookiePairs));
+            }
+        }
+
+        private HttpWebResponse GetResponse(IAsyncResult result)
+        {
+            try
+            {
+                var request = (HttpWebRequest) result.AsyncState;
+                return (HttpWebResponse) request.EndGetResponse(result);
+            }
+            catch (WebException)
+            {
+                return null;
             }
         }
 
