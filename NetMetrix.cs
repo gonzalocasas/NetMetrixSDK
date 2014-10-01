@@ -38,6 +38,9 @@ namespace NetMetrixSdk
         {
             appFrame.Navigated += (sender, args) =>
             {
+                // Content is null when navigating outside the app
+                if (args.Content == null) return;
+
                 var section = GetSectionName(args.Content);
                 Tracker.Track(section);
             };
