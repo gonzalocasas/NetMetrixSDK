@@ -39,7 +39,7 @@ namespace NetMetrixSdk
 
             lastRequest = now;
 
-            var netmetrixUri = new Uri(string.Format("{0}/cgi-bin/ivw/CP/apps/{1}/windowsphone/phone/{2}", BaseDomain, NetMetrix.AppId, section));
+            var netmetrixUri = new Uri(BaseDomain, string.Format("/cgi-bin/ivw/CP/apps/{0}/windowsphone/phone/{1}", NetMetrix.AppId, section));
             ThreadPool.QueueUserWorkItem(i => BeginRequest(netmetrixUri));
         }
 
