@@ -12,6 +12,7 @@ namespace NetMetrixSdk
         public static string Host { get; set; }
         public static string OfferId { get; set; }
         public static string AppId { get; set; }
+        public static string Referer { get; set; }
 
         static NetMetrix()
         {
@@ -27,6 +28,10 @@ namespace NetMetrixSdk
             var app = root.Element("AppID");
             if (app == null || string.IsNullOrWhiteSpace(app.Value)) throw new InvalidOperationException("AppID missing in NetMetrix.xml");
             AppId = app.Value;
+
+            var referer = root.Element("Referer");
+            if (referer == null || string.IsNullOrWhiteSpace(referer.Value)) throw new InvalidOperationException("Referer missing in NetMetrix.xml");
+            Referer = referer.Value;
         }
 
         public static Tracker Tracker

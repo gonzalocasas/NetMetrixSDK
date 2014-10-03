@@ -2,4 +2,5 @@
 <netmetrix>
   <OfferID><!-- Here enter your offer ID (Angebotskennung) --></OfferID>
   <AppID><!-- Here enter your app ID  --></AppID>
+  <Referer><!-- Here enter your referer host --></Referer>
 </netmetrix>

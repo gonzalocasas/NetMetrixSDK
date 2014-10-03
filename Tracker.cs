@@ -47,6 +47,7 @@ namespace NetMetrixSdk
         {
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.UserAgent = "Mozilla/4.0 (compatible; Windows Phone OS; Windowsphone-phone)";
+            request.Headers[HttpRequestHeader.Referer] = NetMetrix.Referer;
             request.CookieContainer = cookies ?? new CookieContainer();
             request.AllowAutoRedirect = false;
 
