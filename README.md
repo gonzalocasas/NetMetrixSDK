@@ -10,7 +10,7 @@ Using [NuGet](https://www.nuget.org/packages/NetMetrixSdk/) package manager:
     PM> Install-Package NetMetrixSdk
 
 This adds also the file ``Properties\NetMetrix.xml`` with configuration values. 
-Make sure you assign your offer ID (Angebotskennung) and app ID.
+Make sure you assign your offer ID (Angebotskennung), app ID and referer.
 
 ## How to use
 
