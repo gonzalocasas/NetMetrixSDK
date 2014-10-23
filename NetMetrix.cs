@@ -53,8 +53,16 @@ namespace NetMetrixSdk
 
         private static string GetSectionName(object content)
         {
-            var attribute = (NetMetrixAttribute)Attribute.GetCustomAttribute(content.GetType(), typeof(NetMetrixAttribute));
-            return attribute != null ? attribute.Section : Tracker.DefaultSection;
+            try
+            {
+                var attribute =
+                    (NetMetrixAttribute) Attribute.GetCustomAttribute(content.GetType(), typeof (NetMetrixAttribute));
+                return attribute != null ? attribute.Section : Tracker.DefaultSection;
+            }
+            catch
+            {
+                return Tracker.DefaultSection;
+            }
         }
     }
 }
