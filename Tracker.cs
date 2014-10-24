@@ -9,6 +9,7 @@ namespace NetMetrixSdk
     {
         public const string DefaultSection = "general";
         private DateTime lastRequest = DateTime.MinValue;
+        public event UnhandledExceptionEventHandler TrackingFailed;
 
         public CookieStore CookieStore { get; set; }
 
@@ -31,35 +32,51 @@ namespace NetMetrixSdk
         /// <param name="section">Name of the section to track. Defaults to 'general'.</param>
         public void Track(string section = DefaultSection)
         {
-            var now = DateTime.Now;
-            if (now - lastRequest <= TimeSpan.FromSeconds(2))
+            try
             {
-                return;
+                var now = DateTime.Now;
+                if (now - lastRequest <= TimeSpan.FromSeconds(2))
+                {
+                    return;
+                }
+
+                lastRequest = now;
+
+                var netmetrixUri = new Uri(BaseDomain,
+                    string.Format("/cgi-bin/ivw/CP/apps/{0}/windowsphone/phone/{1}", NetMetrix.AppId, section));
+                ThreadPool.QueueUserWorkItem(i => BeginRequest(netmetrixUri));
             }
-
-            lastRequest = now;
-
-            var netmetrixUri = new Uri(BaseDomain, string.Format("/cgi-bin/ivw/CP/apps/{0}/windowsphone/phone/{1}", NetMetrix.AppId, section));
-            ThreadPool.QueueUserWorkItem(i => BeginRequest(netmetrixUri));
+            catch (Exception exception)
+            {
+                OnUnhandledException(new UnhandledExceptionEventArgs(exception, false));
+            }
         }
 
         private IAsyncResult BeginRequest(Uri uri, CookieContainer cookies = null)
         {
-            var request = (HttpWebRequest)WebRequest.Create(uri);
-            request.UserAgent = "Mozilla/4.0 (compatible; Windows Phone OS; Windowsphone-phone)";
-            request.Headers[HttpRequestHeader.Referer] = NetMetrix.Referer;
-            request.CookieContainer = cookies ?? new CookieContainer();
-            request.AllowAutoRedirect = false;
-
-            // The cookie container in WP7 is fucked up, so add cookies manually to the headers
-            // http://matthiasshapiro.com/2012/01/02/adding-cookies-to-a-windows-phone-7-httpwebrequest/
-            string cookie = CookieStore.Load(CookieStorageKey);
-            if (!string.IsNullOrWhiteSpace(cookie))
+            try
             {
-                request.Headers["Cookie"] = cookie;
-            }
+                var request = (HttpWebRequest) WebRequest.Create(uri);
+                request.UserAgent = "Mozilla/4.0 (compatible; Windows Phone OS; Windowsphone-phone)";
+                request.Headers[HttpRequestHeader.Referer] = NetMetrix.Referer;
+                request.CookieContainer = cookies ?? new CookieContainer();
+                request.AllowAutoRedirect = false;
 
-            return request.BeginGetResponse(HandleResponse, request);
+                // The cookie container in WP7 is fucked up, so add cookies manually to the headers
+                // http://matthiasshapiro.com/2012/01/02/adding-cookies-to-a-windows-phone-7-httpwebrequest/
+                string cookie = CookieStore.Load(CookieStorageKey);
+                if (!string.IsNullOrWhiteSpace(cookie))
+                {
+                    request.Headers["Cookie"] = cookie;
+                }
+
+                return request.BeginGetResponse(HandleResponse, request);
+            }
+            catch (Exception exception)
+            {
+                OnUnhandledException(new UnhandledExceptionEventArgs(exception, false));
+                return null;
+            }
         }
 
         private bool RedirectHandled(HttpWebResponse response, CookieContainer cookies)
@@ -83,24 +100,31 @@ namespace NetMetrixSdk
 
         private void HandleResponse(IAsyncResult result)
         {
-            var request = (HttpWebRequest)result.AsyncState;
-            var response = GetResponse(result);
-
-            if (response == null) return;
-
-            // We add cookies to a fixed cookie domain to make sure we can access them later
-            // Otherwise the redirects make it hard to guess where the cookie ended up
-            request.CookieContainer.Add(BaseDomain, response.Cookies);
-
-            if (RedirectHandled(response, request.CookieContainer)) return;
-
-            // All redirects handled, we're ready to store cookies
-            var cookies = request.CookieContainer.GetCookies(BaseDomain).Cast<Cookie>();
-            var cookiePairs = (from c in cookies select string.Format("{0}={1}", c.Name, c.Value)).ToArray();
-
-            if (cookiePairs.Any())
+            try
             {
-                CookieStore.Save(CookieStorageKey, string.Join("; ", cookiePairs));
+                var request = (HttpWebRequest) result.AsyncState;
+                var response = GetResponse(result);
+
+                if (response == null) return;
+
+                // We add cookies to a fixed cookie domain to make sure we can access them later
+                // Otherwise the redirects make it hard to guess where the cookie ended up
+                request.CookieContainer.Add(BaseDomain, response.Cookies);
+
+                if (RedirectHandled(response, request.CookieContainer)) return;
+
+                // All redirects handled, we're ready to store cookies
+                var cookies = request.CookieContainer.GetCookies(BaseDomain).Cast<Cookie>();
+                var cookiePairs = (from c in cookies select string.Format("{0}={1}", c.Name, c.Value)).ToArray();
+
+                if (cookiePairs.Any())
+                {
+                    CookieStore.Save(CookieStorageKey, string.Join("; ", cookiePairs));
+                }
+            }
+            catch (Exception exception)
+            {
+                OnUnhandledException(new UnhandledExceptionEventArgs(exception, false));
             }
         }
 
@@ -114,6 +138,16 @@ namespace NetMetrixSdk
             catch (WebException)
             {
                 return null;
+            }
+        }
+
+        protected virtual void OnUnhandledException(UnhandledExceptionEventArgs e)
+        {
+            var handler = TrackingFailed;
+
+            if (handler != null)
+            {
+                handler(this, e);
             }
         }
 
