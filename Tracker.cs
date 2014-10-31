@@ -85,14 +85,24 @@ namespace NetMetrixSdk
 
             if (statusCode >= 300 && statusCode < 400)
             {
-                Uri newLocation;
                 var location = response.Headers["Location"];
 
-                if (!string.IsNullOrWhiteSpace(location) && Uri.TryCreate(location, UriKind.Absolute, out newLocation))
+                if (string.IsNullOrWhiteSpace(location))
                 {
-                    BeginRequest(newLocation, cookies);
-                    return true;
+                    return false;
                 }
+                
+                Uri newLocation;
+                if (!Uri.TryCreate(BaseDomain, location, out newLocation))
+                {
+                    if (!Uri.TryCreate(location, UriKind.Absolute, out newLocation))
+                    {
+                        return false;
+                    }
+                }
+
+                BeginRequest(newLocation, cookies);
+                return true;
             }
 
             return false;
