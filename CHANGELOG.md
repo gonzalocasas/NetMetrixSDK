@@ -1,3 +1,7 @@
+## v1.0.6
+
+- Fix redirection handling for Windows Phone 7.x devices
+
 ## v1.0.5
 
 - Do not propagate execptions, instead provide an optional handler
